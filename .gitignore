@@ -1,0 +1,7 @@
+go.sum
+build/bin
+node_modules
+package-lock.json
+frontend/dist
+frontend/wailsjs
+/*.syso
