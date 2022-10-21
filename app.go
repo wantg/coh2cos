@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -32,7 +33,13 @@ func NewApp() *App {
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
-	a.db, _ = gorm.Open(sqlite.Open(filepath.Join(Config.ExeDirPath, "cohcos.db")), &gorm.Config{})
+	dbPath := filepath.Join(Config.ExeDirPath, "cohcos.db")
+	_, err := os.Stat(dbPath)
+	a.db, _ = gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
+	if errors.Is(err, os.ErrNotExist) {
+		structures := []interface{}{&player{}, &match{}}
+		a.db.AutoMigrate(structures...)
+	}
 }
 
 // Greet returns a greeting for the given name
