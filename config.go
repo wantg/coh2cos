@@ -19,7 +19,7 @@ type config struct {
 const configMatadata = `
 logPath: '%USERPROFILE%\Documents\My Games\Company of Heroes 2\warnings.log'
 window:
-    minWidth: 1500
+    minWidth: 1280
     minHeight: 1000
 `
 

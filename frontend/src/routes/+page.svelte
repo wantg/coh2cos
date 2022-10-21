@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte';
+  import dayjs from 'dayjs';
   import constants from '../constants';
 
   let matchs = [];
@@ -93,7 +94,7 @@
     <nav class="match-triggers panel">
       {#each matchs as match}
         <a class="panel-block is-block has-text-centered" class:is-active={pickedMatch && pickedMatch.matchID == match.matchID} on:click={loadMatch(match.matchID)}>
-          {new Date(match.startedAt).toLocaleString()}
+          {dayjs(match.startedAt).format('YY-MM-DD HH:mm')}
         </a>
       {/each}
     </nav>
@@ -113,7 +114,7 @@
                 <p class="f32 has-text-right" title={player.summary.country.toUpperCase()}><span class="flag {player.summary.country}" /></p>
               </div>
             </div>
-            <table class="table is-bordered is-striped is-narrow1 is-hoverable is-fullwidth left-player">
+            <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth left-player">
               <thead>
                 <tr>
                   {#each tableHeader as h}
@@ -144,7 +145,7 @@
                 <p class="f32" title={player.summary.country.toUpperCase()}><span class="flag {player.summary.country}" /></p>
               </div>
             </div>
-            <table class="table is-bordered is-striped is-narrow1 is-hoverable is-fullwidth right-player">
+            <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth right-player">
               <thead>
                 <tr>
                   {#each JSON.parse(JSON.stringify(tableHeader)).reverse() as h}
@@ -171,9 +172,11 @@
 
 <style>
   .match-triggers {
-    width: 180px !important;
     max-height: 100vh;
     overflow-y: auto;
+  }
+  .match-triggers > a {
+    white-space: nowrap;
   }
   .panel-block:first-child {
     border-top-left-radius: 6px;
