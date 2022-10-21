@@ -33,7 +33,7 @@
           if (player.summary) {
             player.summary = JSON.parse(player.summary);
           } else {
-            player.summary = { country: '' };
+            player.summary = { country: '', avatar: '/images/coh2-logo.png' };
           }
           if (player.stats) {
             player.stats = convertStatData(JSON.parse(player.stats), player.faction);
