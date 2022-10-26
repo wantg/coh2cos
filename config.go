@@ -35,7 +35,7 @@ func initConfig() {
 	configFilePath := filepath.Join(executableDirPath, configFileName)
 
 	if _, err := os.Stat(configFilePath); errors.Is(err, os.ErrNotExist) {
-		os.WriteFile(configFilePath, []byte(defaultConfigMatadata), os.ModePerm)
+		os.WriteFile(configFilePath, []byte(strings.TrimSpace(defaultConfigMatadata)), os.ModePerm)
 	}
 	bts, _ := os.ReadFile(configFilePath)
 	Config = &config{}
