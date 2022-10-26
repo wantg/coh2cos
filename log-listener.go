@@ -9,25 +9,12 @@ import (
 	"github.com/hpcloud/tail"
 )
 
-func parseLogPath(logPath string) string {
-	parsedlogPath := logPath
-	sysVarList := []string{"USERPROFILE"}
-	for _, v := range sysVarList {
-		_v := "%" + v + "%"
-		if strings.Contains(parsedlogPath, _v) {
-			parsedlogPath = strings.ReplaceAll(parsedlogPath, _v, os.Getenv(v))
-		}
-	}
-	return parsedlogPath
-}
-
 func logListenerStart(logPath string, keywords []string, handler func(string, string)) {
-	parsedlogPath := parseLogPath(logPath)
-	if _, err := os.Stat(parsedlogPath); os.IsNotExist(err) {
+	if _, err := os.Stat(logPath); os.IsNotExist(err) {
 		log.Println(err)
 		return
 	}
-	go listenWarningsLogLine(parsedlogPath, keywords, handler)
+	go listenWarningsLogLine(logPath, keywords, handler)
 }
 
 func listenWarningsLogLine(logPath string, keywords []string, handler func(string, string)) {

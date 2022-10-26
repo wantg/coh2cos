@@ -4,6 +4,7 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"gopkg.in/yaml.v3"
 )
@@ -40,4 +41,17 @@ func initConfig() {
 	Config = &config{}
 	yaml.Unmarshal(bts, Config)
 	Config.ExeDirPath = filepath.Join(executableDirPath)
+	Config.LogPath = parseSysVar(Config.LogPath)
+}
+
+func parseSysVar(s string) string {
+	parsedVar := s
+	sysVarList := []string{"USERPROFILE"}
+	for _, v := range sysVarList {
+		_v := "%" + v + "%"
+		if strings.Contains(parsedVar, _v) {
+			parsedVar = strings.ReplaceAll(parsedVar, _v, os.Getenv(v))
+		}
+	}
+	return parsedVar
 }
