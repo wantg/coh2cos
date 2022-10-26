@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 
@@ -16,7 +17,9 @@ type config struct {
 	} `json:"Window" yaml:"window"`
 }
 
-const configMatadata = `
+const configFileName = "config.yaml"
+
+const defaultConfigMatadata = `
 logPath: '%USERPROFILE%\Documents\My Games\Company of Heroes 2\warnings.log'
 window:
     minWidth: 1280
@@ -26,8 +29,15 @@ window:
 var Config *config
 
 func initConfig() {
-	Config = &config{}
-	yaml.Unmarshal([]byte(configMatadata), Config)
 	executablePath, _ := os.Executable()
-	Config.ExeDirPath = filepath.Join(filepath.Dir(executablePath))
+	executableDirPath := filepath.Dir(executablePath)
+	configFilePath := filepath.Join(executableDirPath, configFileName)
+
+	if _, err := os.Stat(configFilePath); errors.Is(err, os.ErrNotExist) {
+		os.WriteFile(configFilePath, []byte(defaultConfigMatadata), os.ModePerm)
+	}
+	bts, _ := os.ReadFile(configFilePath)
+	Config = &config{}
+	yaml.Unmarshal(bts, Config)
+	Config.ExeDirPath = filepath.Join(executableDirPath)
 }
