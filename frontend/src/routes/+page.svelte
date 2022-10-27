@@ -33,6 +33,9 @@
         for (const player of pickedMatch.players) {
           if (player.summary) {
             player.summary = JSON.parse(player.summary);
+            if (player.summary.name) {
+              player.summary.steamID = player.summary.name.split('/')[2];
+            }
           } else {
             player.summary = { country: '' };
           }
@@ -75,6 +78,12 @@
     }
     return data;
   };
+
+  const openPlayerCardInCoh2Org = (playerSummary) => {
+    if (playerSummary.steamID) {
+      runtime.BrowserOpenURL(`https://www.coh2.org/ladders/playercard/steamid/${playerSummary.steamID}`);
+    }
+  };
 </script>
 
 <svelte:head>
@@ -106,7 +115,7 @@
       <div class="is-flex">
         <div class="is-flex-grow-1 pr-2">
           {#each leftPlayers as player, i}
-            <div class="player-summary is-flex left is-flex-direction-row-reverse">
+            <div class="player-summary is-flex left is-flex-direction-row-reverse" class:is-clickable={!!player.summary.steamID} on:click={() => openPlayerCardInCoh2Org(player.summary)}>
               <div><img src="/images/faction-{player.faction.replace(/_/g, '-')}.png" /></div>
               <div class="avatar pl-2 pr-2"><img src={player.summary.avatar} /></div>
               <div>
@@ -137,7 +146,7 @@
         </div>
         <div class="is-flex-grow-1 pl-2">
           {#each rightPlayers as player, i}
-            <div class="player-summary is-flex right">
+            <div class="player-summary is-flex right" class:is-clickable={!!player.summary.steamID} on:click={() => openPlayerCardInCoh2Org(player.summary)}>
               <div><img src="/images/faction-{player.faction.replace(/_/g, '-')}.png" /></div>
               <div class="avatar pl-2 pr-2"><img src={player.summary.avatar} /></div>
               <div>
