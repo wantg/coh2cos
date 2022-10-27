@@ -23,7 +23,7 @@ const configFileName = "config.yaml"
 const defaultConfigMatadata = `
 logPath: '%USERPROFILE%\Documents\My Games\Company of Heroes 2\warnings.log'
 window:
-    minWidth: 1378
+    minWidth: 1300
     minHeight: 1000
 `
 

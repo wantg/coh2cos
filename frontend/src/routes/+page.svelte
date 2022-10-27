@@ -21,6 +21,7 @@
       tableHeader = ['掉线', '总数', '胜率', '输', '赢', '趋势', '级别', '排名', '模式'];
     }
     window.go.main.App.StartLogListener();
+    document.documentElement.style.overflowY = 'hidden';
   });
 
   const loadMatch = (matchID) => {
